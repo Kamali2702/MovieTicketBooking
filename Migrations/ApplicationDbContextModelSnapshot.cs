@@ -85,6 +85,38 @@ namespace MovieTicketBooking.Migrations
                     b.ToTable("Screens");
                 });
 
+            modelBuilder.Entity("MovieTicketBooking.Models.Seat", b =>
+                {
+                    b.Property<int>("SeatId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SeatId"));
+
+                    b.Property<string>("RowName")
+                        .IsRequired()
+                        .HasMaxLength(5)
+                        .HasColumnType("nvarchar(5)");
+
+                    b.Property<int>("ScreenId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SeatNumber")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SeatType")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.HasKey("SeatId");
+
+                    b.HasIndex("ScreenId", "RowName", "SeatNumber")
+                        .IsUnique();
+
+                    b.ToTable("Seats");
+                });
+
             modelBuilder.Entity("MovieTicketBooking.Models.Theatre", b =>
                 {
                     b.Property<int>("TheatreId")
@@ -117,6 +149,17 @@ namespace MovieTicketBooking.Migrations
                         .IsRequired();
 
                     b.Navigation("Theatre");
+                });
+
+            modelBuilder.Entity("MovieTicketBooking.Models.Seat", b =>
+                {
+                    b.HasOne("MovieTicketBooking.Models.Screen", "Screen")
+                        .WithMany()
+                        .HasForeignKey("ScreenId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Screen");
                 });
 #pragma warning restore 612, 618
         }
