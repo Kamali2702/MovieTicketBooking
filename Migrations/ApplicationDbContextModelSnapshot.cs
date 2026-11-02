@@ -58,7 +58,7 @@ namespace MovieTicketBooking.Migrations
 
                     b.HasKey("MovieId");
 
-                    b.ToTable("Movies", (string)null);
+                    b.ToTable("Movies");
                 });
 
             modelBuilder.Entity("MovieTicketBooking.Models.Screen", b =>
@@ -71,8 +71,8 @@ namespace MovieTicketBooking.Migrations
 
                     b.Property<string>("ScreenName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("TheatreId")
                         .HasColumnType("int");
@@ -82,7 +82,7 @@ namespace MovieTicketBooking.Migrations
                     b.HasIndex("TheatreId", "ScreenName")
                         .IsUnique();
 
-                    b.ToTable("Screens", (string)null);
+                    b.ToTable("Screens");
                 });
 
             modelBuilder.Entity("MovieTicketBooking.Models.Seat", b =>
@@ -114,7 +114,69 @@ namespace MovieTicketBooking.Migrations
                     b.HasIndex("ScreenId", "RowName", "SeatNumber")
                         .IsUnique();
 
-                    b.ToTable("Seats", (string)null);
+                    b.ToTable("Seats");
+                });
+
+            modelBuilder.Entity("MovieTicketBooking.Models.Show", b =>
+                {
+                    b.Property<int>("ShowId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ShowId"));
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("MovieId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ScreenId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("TicketPrice")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("decimal(10,2)");
+
+                    b.HasKey("ShowId");
+
+                    b.HasIndex("MovieId");
+
+                    b.HasIndex("ScreenId");
+
+                    b.ToTable("Shows");
+                });
+
+            modelBuilder.Entity("MovieTicketBooking.Models.ShowSeat", b =>
+                {
+                    b.Property<int>("ShowSeatId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ShowSeatId"));
+
+                    b.Property<int>("SeatId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ShowId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.HasKey("ShowSeatId");
+
+                    b.HasIndex("SeatId");
+
+                    b.HasIndex("ShowId", "SeatId")
+                        .IsUnique();
+
+                    b.ToTable("ShowSeats");
                 });
 
             modelBuilder.Entity("MovieTicketBooking.Models.Theatre", b =>
@@ -137,7 +199,7 @@ namespace MovieTicketBooking.Migrations
 
                     b.HasKey("TheatreId");
 
-                    b.ToTable("Theatres", (string)null);
+                    b.ToTable("Theatres");
                 });
 
             modelBuilder.Entity("MovieTicketBooking.Models.Screen", b =>
@@ -154,12 +216,60 @@ namespace MovieTicketBooking.Migrations
             modelBuilder.Entity("MovieTicketBooking.Models.Seat", b =>
                 {
                     b.HasOne("MovieTicketBooking.Models.Screen", "Screen")
-                        .WithMany()
+                        .WithMany("Seats")
                         .HasForeignKey("ScreenId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Screen");
+                });
+
+            modelBuilder.Entity("MovieTicketBooking.Models.Show", b =>
+                {
+                    b.HasOne("MovieTicketBooking.Models.Movie", "Movie")
+                        .WithMany()
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("MovieTicketBooking.Models.Screen", "Screen")
+                        .WithMany()
+                        .HasForeignKey("ScreenId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Movie");
+
+                    b.Navigation("Screen");
+                });
+
+            modelBuilder.Entity("MovieTicketBooking.Models.ShowSeat", b =>
+                {
+                    b.HasOne("MovieTicketBooking.Models.Seat", "Seat")
+                        .WithMany()
+                        .HasForeignKey("SeatId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("MovieTicketBooking.Models.Show", "Show")
+                        .WithMany("ShowSeats")
+                        .HasForeignKey("ShowId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Seat");
+
+                    b.Navigation("Show");
+                });
+
+            modelBuilder.Entity("MovieTicketBooking.Models.Screen", b =>
+                {
+                    b.Navigation("Seats");
+                });
+
+            modelBuilder.Entity("MovieTicketBooking.Models.Show", b =>
+                {
+                    b.Navigation("ShowSeats");
                 });
 #pragma warning restore 612, 618
         }

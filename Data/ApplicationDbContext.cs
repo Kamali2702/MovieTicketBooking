@@ -18,7 +18,8 @@ namespace MovieTicketBooking.Data
         public DbSet<Screen> Screens { get; set; }
 
         public DbSet<Seat> Seats { get; set; }
-
+        public DbSet<Show> Shows { get; set; }
+        public DbSet<ShowSeat> ShowSeats { get; set; }
         protected override void OnModelCreating(
             ModelBuilder modelBuilder)
         {
@@ -110,6 +111,53 @@ namespace MovieTicketBooking.Data
                         s.RowName,
                         s.SeatNumber
                     })
+                    .IsUnique();
+            });
+
+            modelBuilder.Entity<Show>(entity =>
+            {
+                entity.HasKey(s => s.ShowId);
+
+                entity.Property(s => s.StartTime)
+                    .IsRequired();
+
+                entity.Property(s => s.EndTime)
+                    .IsRequired();
+
+                entity.Property(s => s.TicketPrice)
+                    .IsRequired()
+                    .HasPrecision(10, 2);
+
+                entity.HasOne(s => s.Movie)
+                    .WithMany()
+                    .HasForeignKey(s => s.MovieId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(s => s.Screen)
+                    .WithMany()
+                    .HasForeignKey(s => s.ScreenId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity<ShowSeat>(entity =>
+            {
+                entity.HasKey(ss => ss.ShowSeatId);
+
+                entity.Property(ss => ss.Status)
+                    .IsRequired()
+                    .HasMaxLength(20);
+
+                entity.HasOne(ss => ss.Show)
+                    .WithMany(s => s.ShowSeats)
+                    .HasForeignKey(ss => ss.ShowId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(ss => ss.Seat)
+                    .WithMany()
+                    .HasForeignKey(ss => ss.SeatId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasIndex(ss => new { ss.ShowId, ss.SeatId })
                     .IsUnique();
             });
         }
