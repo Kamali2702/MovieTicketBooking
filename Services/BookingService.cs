@@ -2,6 +2,7 @@
 using MovieTicketBooking.Models;
 using MovieTicketBooking.Repositories.Interfaces;
 using MovieTicketBooking.Services.Interfaces;
+using MovieTicketBooking.Exceptions;
 
 namespace MovieTicketBooking.Services
 {
@@ -63,7 +64,7 @@ namespace MovieTicketBooking.Services
                     "Available",
                     StringComparison.OrdinalIgnoreCase)))
             {
-                throw new InvalidOperationException(
+                throw new ConflictException(
                     "One or more selected seats are already booked.");
             }
 
