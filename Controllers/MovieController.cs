@@ -28,9 +28,15 @@ namespace MovieTicketBooking.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<MovieResponse>>> GetAll()
+        public async Task<ActionResult<List<MovieResponse>>> GetAll(
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 10,
+            [FromQuery] string? title = null)
         {
-            var movies = await _movieService.GetAllAsync();
+            var movies = await _movieService.GetAllAsync(
+                pageNumber,
+                pageSize,
+                title);
 
             return Ok(movies);
         }
@@ -53,7 +59,9 @@ namespace MovieTicketBooking.Controllers
             int id,
             UpdateMovieRequest request)
         {
-            var updated = await _movieService.UpdateAsync(id, request);
+            var updated = await _movieService.UpdateAsync(
+                id,
+                request);
 
             if (!updated)
             {

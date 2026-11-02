@@ -22,10 +22,25 @@ namespace MovieTicketBooking.Repositories
             return movie;
         }
 
-        public async Task<List<Movie>> GetAllAsync()
+        public async Task<List<Movie>> GetAllAsync(
+            int pageNumber,
+            int pageSize,
+            string? title)
         {
-            return await _context.Movies
+            var query = _context.Movies
                 .AsNoTracking()
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(title))
+            {
+                query = query.Where(m =>
+                    m.Title.Contains(title));
+            }
+
+            return await query
+                .OrderBy(m => m.MovieId)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
         }
 

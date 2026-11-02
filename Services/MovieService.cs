@@ -14,7 +14,8 @@ namespace MovieTicketBooking.Services
             _movieRepository = movieRepository;
         }
 
-        public async Task<MovieResponse> CreateAsync(CreateMovieRequest request)
+        public async Task<MovieResponse> CreateAsync(
+            CreateMovieRequest request)
         {
             var movie = new Movie
             {
@@ -31,9 +32,27 @@ namespace MovieTicketBooking.Services
             return MapToResponse(createdMovie);
         }
 
-        public async Task<List<MovieResponse>> GetAllAsync()
+        public async Task<List<MovieResponse>> GetAllAsync(
+            int pageNumber,
+            int pageSize,
+            string? title)
         {
-            var movies = await _movieRepository.GetAllAsync();
+            if (pageNumber < 1)
+                throw new ArgumentException(
+                    "Page number must be greater than 0.");
+
+            if (pageSize < 1)
+                throw new ArgumentException(
+                    "Page size must be greater than 0.");
+
+            if (pageSize > 100)
+                throw new ArgumentException(
+                    "Page size cannot be greater than 100.");
+
+            var movies = await _movieRepository.GetAllAsync(
+                pageNumber,
+                pageSize,
+                title);
 
             return movies
                 .Select(MapToResponse)
@@ -47,14 +66,17 @@ namespace MovieTicketBooking.Services
             return movie == null ? null : MapToResponse(movie);
         }
 
-        public async Task<MovieResponse?> SearchByTitleAsync(string title)
+        public async Task<MovieResponse?> SearchByTitleAsync(
+            string title)
         {
             var movie = await _movieRepository.GetByTitleAsync(title);
 
             return movie == null ? null : MapToResponse(movie);
         }
 
-        public async Task<bool> UpdateAsync(int id, UpdateMovieRequest request)
+        public async Task<bool> UpdateAsync(
+            int id,
+            UpdateMovieRequest request)
         {
             var movie = await _movieRepository.GetByIdAsync(id);
 
