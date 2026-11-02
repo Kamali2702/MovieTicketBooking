@@ -19,6 +19,7 @@ namespace MovieTicketBooking.Data
         public DbSet<ShowSeat> ShowSeats { get; set; }
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<BookingSeat> BookingSeats { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -213,6 +214,33 @@ namespace MovieTicketBooking.Data
                     .WithMany()
                     .HasForeignKey(bs => bs.SeatId)
                     .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.HasKey(u => u.UserId);
+
+                entity.Property(u => u.Username)
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(u => u.Email)
+                    .IsRequired()
+                    .HasMaxLength(150);
+
+                entity.Property(u => u.PasswordHash)
+                    .IsRequired()
+                    .HasMaxLength(500);
+
+                entity.Property(u => u.Role)
+                    .IsRequired()
+                    .HasMaxLength(30);
+
+                entity.HasIndex(u => u.Username)
+                    .IsUnique();
+
+                entity.HasIndex(u => u.Email)
+                    .IsUnique();
             });
         }
     }
