@@ -21,7 +21,8 @@ namespace MovieTicketBooking.Services
             _screenRepository = screenRepository;
         }
 
-        public async Task<ShowResponse> CreateAsync(CreateShowRequest request)
+        public async Task<ShowResponse> CreateAsync(
+            CreateShowRequest request)
         {
             if (request.StartTime >= request.EndTime)
             {
@@ -35,18 +36,22 @@ namespace MovieTicketBooking.Services
                     "Ticket price cannot be negative.");
             }
 
-            var movie = await _movieRepository.GetByIdAsync(request.MovieId);
+            var movie = await _movieRepository.GetByIdAsync(
+                request.MovieId);
 
             if (movie == null)
             {
-                throw new KeyNotFoundException("Movie not found.");
+                throw new KeyNotFoundException(
+                    "Movie not found.");
             }
 
-            var screen = await _screenRepository.GetByIdAsync(request.ScreenId);
+            var screen = await _screenRepository.GetByIdAsync(
+                request.ScreenId);
 
             if (screen == null)
             {
-                throw new KeyNotFoundException("Screen not found.");
+                throw new KeyNotFoundException(
+                    "Screen not found.");
             }
 
             var hasOverlap = await _showRepository.HasOverlapAsync(
@@ -92,9 +97,37 @@ namespace MovieTicketBooking.Services
             return MapToResponse(show);
         }
 
-        public async Task<List<ShowResponse>> GetAllAsync()
+        public async Task<List<ShowResponse>> GetAllAsync(
+            int pageNumber,
+            int pageSize,
+            DateTime? date,
+            int? movieId,
+            int? theatreId)
         {
-            var shows = await _showRepository.GetAllAsync();
+            if (pageNumber < 1)
+            {
+                throw new ArgumentException(
+                    "Page number must be greater than 0.");
+            }
+
+            if (pageSize < 1)
+            {
+                throw new ArgumentException(
+                    "Page size must be greater than 0.");
+            }
+
+            if (pageSize > 100)
+            {
+                throw new ArgumentException(
+                    "Page size cannot be greater than 100.");
+            }
+
+            var shows = await _showRepository.GetAllAsync(
+                pageNumber,
+                pageSize,
+                date,
+                movieId,
+                theatreId);
 
             return shows
                 .Select(MapToResponse)
@@ -113,25 +146,30 @@ namespace MovieTicketBooking.Services
             return MapToResponse(show);
         }
 
-        public async Task<List<ShowResponse>> GetByMovieIdAsync(int movieId)
+        public async Task<List<ShowResponse>> GetByMovieIdAsync(
+            int movieId)
         {
-            var shows = await _showRepository.GetByMovieIdAsync(movieId);
+            var shows = await _showRepository.GetByMovieIdAsync(
+                movieId);
 
             return shows
                 .Select(MapToResponse)
                 .ToList();
         }
 
-        public async Task<List<ShowResponse>> GetByTheatreIdAsync(int theatreId)
+        public async Task<List<ShowResponse>> GetByTheatreIdAsync(
+            int theatreId)
         {
-            var shows = await _showRepository.GetByTheatreIdAsync(theatreId);
+            var shows = await _showRepository.GetByTheatreIdAsync(
+                theatreId);
 
             return shows
                 .Select(MapToResponse)
                 .ToList();
         }
 
-        public async Task<List<ShowResponse>> GetByDateAsync(DateTime date)
+        public async Task<List<ShowResponse>> GetByDateAsync(
+            DateTime date)
         {
             var shows = await _showRepository.GetByDateAsync(date);
 
@@ -140,20 +178,23 @@ namespace MovieTicketBooking.Services
                 .ToList();
         }
 
-        public async Task<List<ShowSeatResponse>> GetShowSeatsAsync(int showId)
+        public async Task<List<ShowSeatResponse>> GetShowSeatsAsync(
+            int showId)
         {
             var show = await _showRepository.GetByIdAsync(showId);
 
             if (show == null)
             {
-                throw new KeyNotFoundException("Show not found.");
+                throw new KeyNotFoundException(
+                    "Show not found.");
             }
 
             var seats = await _showRepository.GetSeatsByScreenIdAsync(
                 show.ScreenId);
 
-            var showSeats = await _showRepository.GetShowSeatsByShowIdAsync(
-                showId);
+            var showSeats =
+                await _showRepository.GetShowSeatsByShowIdAsync(
+                    showId);
 
             var showSeatStatus = showSeats.ToDictionary(
                 ss => ss.SeatId,
@@ -195,14 +236,17 @@ namespace MovieTicketBooking.Services
 
             if (show == null)
             {
-                throw new KeyNotFoundException("Show not found.");
+                throw new KeyNotFoundException(
+                    "Show not found.");
             }
 
-            var movie = await _movieRepository.GetByIdAsync(request.MovieId);
+            var movie = await _movieRepository.GetByIdAsync(
+                request.MovieId);
 
             if (movie == null)
             {
-                throw new KeyNotFoundException("Movie not found.");
+                throw new KeyNotFoundException(
+                    "Movie not found.");
             }
 
             var screen = await _screenRepository.GetByIdAsync(
@@ -210,7 +254,8 @@ namespace MovieTicketBooking.Services
 
             if (screen == null)
             {
-                throw new KeyNotFoundException("Screen not found.");
+                throw new KeyNotFoundException(
+                    "Screen not found.");
             }
 
             var hasOverlap = await _showRepository.HasOverlapAsync(
@@ -240,7 +285,8 @@ namespace MovieTicketBooking.Services
 
             if (show == null)
             {
-                throw new KeyNotFoundException("Show not found.");
+                throw new KeyNotFoundException(
+                    "Show not found.");
             }
 
             var showSeats =
@@ -248,7 +294,8 @@ namespace MovieTicketBooking.Services
 
             if (showSeats.Count > 0)
             {
-                await _showRepository.DeleteShowSeatsAsync(showSeats);
+                await _showRepository.DeleteShowSeatsAsync(
+                    showSeats);
             }
 
             await _showRepository.DeleteAsync(show);

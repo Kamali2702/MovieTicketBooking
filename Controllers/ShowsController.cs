@@ -29,31 +29,20 @@ namespace MovieTicketBooking.Controllers
 
         [HttpGet]
         public async Task<IActionResult> GetAll(
-            [FromQuery] DateTime? date,
-            [FromQuery] int? movieId,
-            [FromQuery] int? theatreId)
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 10,
+            [FromQuery] DateTime? date = null,
+            [FromQuery] int? movieId = null,
+            [FromQuery] int? theatreId = null)
         {
-            if (date.HasValue)
-            {
-                var shows = await _showService.GetByDateAsync(date.Value);
-                return Ok(shows);
-            }
+            var shows = await _showService.GetAllAsync(
+                pageNumber,
+                pageSize,
+                date,
+                movieId,
+                theatreId);
 
-            if (movieId.HasValue)
-            {
-                var shows = await _showService.GetByMovieIdAsync(movieId.Value);
-                return Ok(shows);
-            }
-
-            if (theatreId.HasValue)
-            {
-                var shows = await _showService.GetByTheatreIdAsync(theatreId.Value);
-                return Ok(shows);
-            }
-
-            var allShows = await _showService.GetAllAsync();
-
-            return Ok(allShows);
+            return Ok(shows);
         }
 
         [HttpGet("{id}")]

@@ -6,7 +6,12 @@ namespace MovieTicketBooking.Services.Interfaces
     {
         Task<ShowResponse> CreateAsync(CreateShowRequest request);
 
-        Task<List<ShowResponse>> GetAllAsync();
+        Task<List<ShowResponse>> GetAllAsync(
+            int pageNumber,
+            int pageSize,
+            DateTime? date,
+            int? movieId,
+            int? theatreId);
 
         Task<ShowResponse?> GetByIdAsync(int id);
 

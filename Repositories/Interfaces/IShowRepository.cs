@@ -6,7 +6,12 @@ namespace MovieTicketBooking.Repositories.Interfaces
     {
         Task<Show> CreateAsync(Show show);
 
-        Task<List<Show>> GetAllAsync();
+        Task<List<Show>> GetAllAsync(
+            int pageNumber,
+            int pageSize,
+            DateTime? date,
+            int? movieId,
+            int? theatreId);
 
         Task<Show?> GetByIdAsync(int id);
 

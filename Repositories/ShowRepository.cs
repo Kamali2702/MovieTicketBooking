@@ -22,11 +22,44 @@ namespace MovieTicketBooking.Repositories
             return show;
         }
 
-        public async Task<List<Show>> GetAllAsync()
+        public async Task<List<Show>> GetAllAsync(
+            int pageNumber,
+            int pageSize,
+            DateTime? date,
+            int? movieId,
+            int? theatreId)
         {
-            return await _context.Shows
+            var query = _context.Shows
                 .AsNoTracking()
+                .AsQueryable();
+
+            if (date.HasValue)
+            {
+                var startDate = date.Value.Date;
+                var endDate = startDate.AddDays(1);
+
+                query = query.Where(s =>
+                    s.StartTime >= startDate &&
+                    s.StartTime < endDate);
+            }
+
+            if (movieId.HasValue)
+            {
+                query = query.Where(s =>
+                    s.MovieId == movieId.Value);
+            }
+
+            if (theatreId.HasValue)
+            {
+                query = query.Where(s =>
+                    s.Screen.TheatreId == theatreId.Value);
+            }
+
+            return await query
                 .OrderBy(s => s.StartTime)
+                .ThenBy(s => s.ShowId)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
         }
 
@@ -77,7 +110,8 @@ namespace MovieTicketBooking.Repositories
         {
             return await _context.Shows.AnyAsync(s =>
                 s.ScreenId == screenId &&
-                (!excludeShowId.HasValue || s.ShowId != excludeShowId.Value) &&
+                (!excludeShowId.HasValue ||
+                 s.ShowId != excludeShowId.Value) &&
                 s.StartTime < endTime &&
                 startTime < s.EndTime);
         }
