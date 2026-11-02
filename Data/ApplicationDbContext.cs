@@ -12,20 +12,18 @@ namespace MovieTicketBooking.Data
         }
 
         public DbSet<Movie> Movies { get; set; }
-
         public DbSet<Theatre> Theatres { get; set; }
-
         public DbSet<Screen> Screens { get; set; }
-
         public DbSet<Seat> Seats { get; set; }
         public DbSet<Show> Shows { get; set; }
         public DbSet<ShowSeat> ShowSeats { get; set; }
-        protected override void OnModelCreating(
-            ModelBuilder modelBuilder)
+        public DbSet<Booking> Bookings { get; set; }
+        public DbSet<BookingSeat> BookingSeats { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // Movie
             modelBuilder.Entity<Movie>(entity =>
             {
                 entity.HasKey(m => m.MovieId);
@@ -46,7 +44,6 @@ namespace MovieTicketBooking.Data
                     .HasMaxLength(100);
             });
 
-            // Theatre
             modelBuilder.Entity<Theatre>(entity =>
             {
                 entity.HasKey(t => t.TheatreId);
@@ -60,7 +57,6 @@ namespace MovieTicketBooking.Data
                     .HasMaxLength(200);
             });
 
-            // Screen
             modelBuilder.Entity<Screen>(entity =>
             {
                 entity.HasKey(s => s.ScreenId);
@@ -74,16 +70,10 @@ namespace MovieTicketBooking.Data
                     .HasForeignKey(s => s.TheatreId)
                     .OnDelete(DeleteBehavior.Restrict);
 
-                entity.HasIndex(s =>
-                    new
-                    {
-                        s.TheatreId,
-                        s.ScreenName
-                    })
+                entity.HasIndex(s => new { s.TheatreId, s.ScreenName })
                     .IsUnique();
             });
 
-            // Seat
             modelBuilder.Entity<Seat>(entity =>
             {
                 entity.HasKey(s => s.SeatId);
@@ -157,8 +147,72 @@ namespace MovieTicketBooking.Data
                     .HasForeignKey(ss => ss.SeatId)
                     .OnDelete(DeleteBehavior.Restrict);
 
-                entity.HasIndex(ss => new { ss.ShowId, ss.SeatId })
+                entity.HasIndex(ss =>
+                    new
+                    {
+                        ss.ShowId,
+                        ss.SeatId
+                    })
                     .IsUnique();
+            });
+
+            modelBuilder.Entity<Booking>(entity =>
+            {
+                entity.HasKey(b => b.BookingId);
+
+                entity.Property(b => b.BookingReference)
+                    .IsRequired()
+                    .HasMaxLength(30);
+
+                entity.Property(b => b.CustomerName)
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(b => b.CustomerEmail)
+                    .IsRequired()
+                    .HasMaxLength(150);
+
+                entity.Property(b => b.CustomerPhone)
+                    .IsRequired()
+                    .HasMaxLength(15);
+
+                entity.Property(b => b.BookingDate)
+                    .IsRequired();
+
+                entity.Property(b => b.TotalAmount)
+                    .IsRequired()
+                    .HasPrecision(10, 2);
+
+                entity.Property(b => b.Status)
+                    .IsRequired()
+                    .HasMaxLength(20);
+
+                entity.HasIndex(b => b.BookingReference)
+                    .IsUnique();
+
+                entity.HasOne(b => b.Show)
+                    .WithMany()
+                    .HasForeignKey(b => b.ShowId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity<BookingSeat>(entity =>
+            {
+                entity.HasKey(bs => bs.BookingSeatId);
+
+                entity.Property(bs => bs.Price)
+                    .IsRequired()
+                    .HasPrecision(10, 2);
+
+                entity.HasOne(bs => bs.Booking)
+                    .WithMany(b => b.BookingSeats)
+                    .HasForeignKey(bs => bs.BookingId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(bs => bs.Seat)
+                    .WithMany()
+                    .HasForeignKey(bs => bs.SeatId)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
         }
     }
