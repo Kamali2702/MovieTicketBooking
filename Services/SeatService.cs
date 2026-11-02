@@ -14,16 +14,10 @@ namespace MovieTicketBooking.Services
             _seatRepository = seatRepository;
         }
 
-        public async Task<SeatResponse> CreateAsync(CreateSeatRequest request)
+        public async Task<SeatResponse> CreateAsync(
+            CreateSeatRequest request)
         {
-            if (request.SeatNumber <= 0)
-                throw new ArgumentException("Seat number must be greater than 0.");
-
-            if (string.IsNullOrWhiteSpace(request.RowName))
-                throw new ArgumentException("Row name is required.");
-
-            if (string.IsNullOrWhiteSpace(request.SeatType))
-                throw new ArgumentException("Seat type is required.");
+            ValidateSeatRequest(request);
 
             var exists = await _seatRepository.ExistsAsync(
                 request.ScreenId,
@@ -31,8 +25,10 @@ namespace MovieTicketBooking.Services
                 request.SeatNumber);
 
             if (exists)
+            {
                 throw new InvalidOperationException(
                     "A seat with the same row and seat number already exists for this screen.");
+            }
 
             var seat = new Seat
             {
@@ -42,16 +38,21 @@ namespace MovieTicketBooking.Services
                 SeatType = request.SeatType
             };
 
-            var createdSeat = await _seatRepository.CreateAsync(seat);
+            var createdSeat =
+                await _seatRepository.CreateAsync(seat);
 
             return MapToResponse(createdSeat);
         }
 
-        public async Task<List<SeatResponse>> GetByScreenIdAsync(int screenId)
+        public async Task<List<SeatResponse>> GetByScreenIdAsync(
+            int screenId)
         {
-            var seats = await _seatRepository.GetByScreenIdAsync(screenId);
+            var seats =
+                await _seatRepository.GetByScreenIdAsync(screenId);
 
-            return seats.Select(MapToResponse).ToList();
+            return seats
+                .Select(MapToResponse)
+                .ToList();
         }
 
         public async Task<SeatResponse?> GetByIdAsync(int id)
@@ -64,26 +65,34 @@ namespace MovieTicketBooking.Services
             return MapToResponse(seat);
         }
 
-        public async Task UpdateAsync(int id, UpdateSeatRequest request)
+        public async Task UpdateAsync(
+            int id,
+            UpdateSeatRequest request)
         {
             if (request.SeatNumber <= 0)
-                throw new ArgumentException("Seat number must be greater than 0.");
+                throw new ArgumentException(
+                    "Seat number must be greater than 0.");
 
             if (string.IsNullOrWhiteSpace(request.RowName))
-                throw new ArgumentException("Row name is required.");
+                throw new ArgumentException(
+                    "Row name is required.");
 
             if (string.IsNullOrWhiteSpace(request.SeatType))
-                throw new ArgumentException("Seat type is required.");
+                throw new ArgumentException(
+                    "Seat type is required.");
 
-            var seat = await _seatRepository.GetByIdAsync(id);
+            var seat =
+                await _seatRepository.GetByIdAsync(id);
 
             if (seat == null)
-                throw new KeyNotFoundException("Seat not found.");
+                throw new KeyNotFoundException(
+                    "Seat not found.");
 
-            var duplicate = await _seatRepository.ExistsAsync(
-                seat.ScreenId,
-                request.RowName,
-                request.SeatNumber);
+            var duplicate =
+                await _seatRepository.ExistsAsync(
+                    seat.ScreenId,
+                    request.RowName,
+                    request.SeatNumber);
 
             if (duplicate &&
                 (seat.RowName != request.RowName ||
@@ -102,10 +111,12 @@ namespace MovieTicketBooking.Services
 
         public async Task DeleteAsync(int id)
         {
-            var seat = await _seatRepository.GetByIdAsync(id);
+            var seat =
+                await _seatRepository.GetByIdAsync(id);
 
             if (seat == null)
-                throw new KeyNotFoundException("Seat not found.");
+                throw new KeyNotFoundException(
+                    "Seat not found.");
 
             await _seatRepository.DeleteAsync(seat);
         }
@@ -113,29 +124,24 @@ namespace MovieTicketBooking.Services
         public async Task<List<SeatResponse>> BulkCreateAsync(
             BulkCreateSeatsRequest request)
         {
-            if (request.Seats == null || request.Seats.Count == 0)
-                throw new ArgumentException("At least one seat is required.");
+            if (request.Seats == null ||
+                request.Seats.Count == 0)
+            {
+                throw new ArgumentException(
+                    "At least one seat is required.");
+            }
 
             var createdSeats = new List<SeatResponse>();
 
             foreach (var seatRequest in request.Seats)
             {
-                if (seatRequest.SeatNumber <= 0)
-                    throw new ArgumentException(
-                        "Seat number must be greater than 0.");
+                ValidateSeatRequest(seatRequest);
 
-                if (string.IsNullOrWhiteSpace(seatRequest.RowName))
-                    throw new ArgumentException(
-                        "Row name is required.");
-
-                if (string.IsNullOrWhiteSpace(seatRequest.SeatType))
-                    throw new ArgumentException(
-                        "Seat type is required.");
-
-                var exists = await _seatRepository.ExistsAsync(
-                    request.ScreenId,
-                    seatRequest.RowName,
-                    seatRequest.SeatNumber);
+                var exists =
+                    await _seatRepository.ExistsAsync(
+                        request.ScreenId,
+                        seatRequest.RowName,
+                        seatRequest.SeatNumber);
 
                 if (exists)
                 {
@@ -143,9 +149,10 @@ namespace MovieTicketBooking.Services
                         $"Seat {seatRequest.RowName}{seatRequest.SeatNumber} already exists.");
                 }
 
-                var duplicateInRequest = createdSeats.Any(s =>
-                    s.RowName == seatRequest.RowName &&
-                    s.SeatNumber == seatRequest.SeatNumber);
+                var duplicateInRequest =
+                    createdSeats.Any(s =>
+                        s.RowName == seatRequest.RowName &&
+                        s.SeatNumber == seatRequest.SeatNumber);
 
                 if (duplicateInRequest)
                 {
@@ -161,15 +168,38 @@ namespace MovieTicketBooking.Services
                     SeatType = seatRequest.SeatType
                 };
 
-                var createdSeat = await _seatRepository.CreateAsync(seat);
+                var createdSeat =
+                    await _seatRepository.CreateAsync(seat);
 
-                createdSeats.Add(MapToResponse(createdSeat));
+                createdSeats.Add(
+                    MapToResponse(createdSeat));
             }
 
             return createdSeats;
         }
 
-        private static SeatResponse MapToResponse(Seat seat)
+        private static void ValidateSeatRequest(
+            CreateSeatRequest request)
+        {
+            if (request.ScreenId <= 0)
+                throw new ArgumentException(
+                    "Screen ID must be greater than 0.");
+
+            if (request.SeatNumber <= 0)
+                throw new ArgumentException(
+                    "Seat number must be greater than 0.");
+
+            if (string.IsNullOrWhiteSpace(request.RowName))
+                throw new ArgumentException(
+                    "Row name is required.");
+
+            if (string.IsNullOrWhiteSpace(request.SeatType))
+                throw new ArgumentException(
+                    "Seat type is required.");
+        }
+
+        private static SeatResponse MapToResponse(
+            Seat seat)
         {
             return new SeatResponse
             {

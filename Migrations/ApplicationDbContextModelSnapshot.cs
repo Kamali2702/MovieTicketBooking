@@ -58,7 +58,7 @@ namespace MovieTicketBooking.Migrations
 
                     b.HasKey("MovieId");
 
-                    b.ToTable("Movies");
+                    b.ToTable("Movies", (string)null);
                 });
 
             modelBuilder.Entity("MovieTicketBooking.Models.Screen", b =>
@@ -82,7 +82,7 @@ namespace MovieTicketBooking.Migrations
                     b.HasIndex("TheatreId", "ScreenName")
                         .IsUnique();
 
-                    b.ToTable("Screens");
+                    b.ToTable("Screens", (string)null);
                 });
 
             modelBuilder.Entity("MovieTicketBooking.Models.Seat", b =>
@@ -114,7 +114,7 @@ namespace MovieTicketBooking.Migrations
                     b.HasIndex("ScreenId", "RowName", "SeatNumber")
                         .IsUnique();
 
-                    b.ToTable("Seats");
+                    b.ToTable("Seats", (string)null);
                 });
 
             modelBuilder.Entity("MovieTicketBooking.Models.Theatre", b =>
@@ -137,7 +137,7 @@ namespace MovieTicketBooking.Migrations
 
                     b.HasKey("TheatreId");
 
-                    b.ToTable("Theatres");
+                    b.ToTable("Theatres", (string)null);
                 });
 
             modelBuilder.Entity("MovieTicketBooking.Models.Screen", b =>

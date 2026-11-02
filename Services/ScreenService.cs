@@ -14,15 +14,33 @@ namespace MovieTicketBooking.Services
             _screenRepository = screenRepository;
         }
 
-        public async Task<ScreenResponse> CreateAsync(CreateScreenRequest request)
+        public async Task<ScreenResponse> CreateAsync(
+            CreateScreenRequest request)
         {
+            if (request.TheatreId <= 0)
+                throw new ArgumentException(
+                    "Theatre ID must be greater than 0.");
+
+            if (string.IsNullOrWhiteSpace(request.ScreenName))
+                throw new ArgumentException(
+                    "Screen name is required.");
+
+            var exists = await _screenRepository.ExistsAsync(
+                request.TheatreId,
+                request.ScreenName);
+
+            if (exists)
+                throw new InvalidOperationException(
+                    "A screen with the same name already exists for this theatre.");
+
             var screen = new Screen
             {
                 TheatreId = request.TheatreId,
                 ScreenName = request.ScreenName
             };
 
-            var createdScreen = await _screenRepository.AddAsync(screen);
+            var createdScreen =
+                await _screenRepository.CreateAsync(screen);
 
             return MapToResponse(createdScreen);
         }
@@ -31,40 +49,71 @@ namespace MovieTicketBooking.Services
         {
             var screens = await _screenRepository.GetAllAsync();
 
-            return screens.Select(MapToResponse).ToList();
+            return screens
+                .Select(MapToResponse)
+                .ToList();
+        }
+
+        public async Task<List<ScreenResponse>> GetByTheatreIdAsync(
+            int theatreId)
+        {
+            var screens =
+                await _screenRepository.GetByTheatreIdAsync(theatreId);
+
+            return screens
+                .Select(MapToResponse)
+                .ToList();
         }
 
         public async Task<ScreenResponse?> GetByIdAsync(int id)
         {
             var screen = await _screenRepository.GetByIdAsync(id);
 
-            return screen == null ? null : MapToResponse(screen);
+            if (screen == null)
+                return null;
+
+            return MapToResponse(screen);
         }
 
-        public async Task<bool> UpdateAsync(int id, UpdateScreenRequest request)
+        public async Task UpdateAsync(
+            int id,
+            UpdateScreenRequest request)
         {
+            if (string.IsNullOrWhiteSpace(request.ScreenName))
+                throw new ArgumentException(
+                    "Screen name is required.");
+
             var screen = await _screenRepository.GetByIdAsync(id);
 
             if (screen == null)
-                return false;
+                throw new KeyNotFoundException(
+                    "Screen not found.");
+
+            var duplicate = await _screenRepository.ExistsAsync(
+                screen.TheatreId,
+                request.ScreenName);
+
+            if (duplicate &&
+                screen.ScreenName != request.ScreenName)
+            {
+                throw new InvalidOperationException(
+                    "A screen with the same name already exists for this theatre.");
+            }
 
             screen.ScreenName = request.ScreenName;
 
             await _screenRepository.UpdateAsync(screen);
-
-            return true;
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task DeleteAsync(int id)
         {
             var screen = await _screenRepository.GetByIdAsync(id);
 
             if (screen == null)
-                return false;
+                throw new KeyNotFoundException(
+                    "Screen not found.");
 
             await _screenRepository.DeleteAsync(screen);
-
-            return true;
         }
 
         private static ScreenResponse MapToResponse(Screen screen)

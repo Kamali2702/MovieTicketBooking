@@ -4,13 +4,17 @@ namespace MovieTicketBooking.Services.Interfaces
 {
     public interface ISeatService
     {
-        Task<SeatResponse> CreateAsync(CreateSeatRequest request);
+        Task<SeatResponse> CreateAsync(
+            CreateSeatRequest request);
 
-        Task<List<SeatResponse>> GetByScreenIdAsync(int screenId);
+        Task<List<SeatResponse>> GetByScreenIdAsync(
+            int screenId);
 
         Task<SeatResponse?> GetByIdAsync(int id);
 
-        Task UpdateAsync(int id, UpdateSeatRequest request);
+        Task UpdateAsync(
+            int id,
+            UpdateSeatRequest request);
 
         Task DeleteAsync(int id);
 

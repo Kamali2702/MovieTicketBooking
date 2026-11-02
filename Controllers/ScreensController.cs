@@ -5,7 +5,7 @@ using MovieTicketBooking.Services.Interfaces;
 namespace MovieTicketBooking.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/screens")]
     public class ScreensController : ControllerBase
     {
         private readonly IScreenService _screenService;
@@ -15,11 +15,13 @@ namespace MovieTicketBooking.Controllers
             _screenService = screenService;
         }
 
+        // POST: api/screens
         [HttpPost]
-        public async Task<ActionResult<ScreenResponse>> Create(
+        public async Task<IActionResult> Create(
             CreateScreenRequest request)
         {
-            var screen = await _screenService.CreateAsync(request);
+            var screen =
+                await _screenService.CreateAsync(request);
 
             return CreatedAtAction(
                 nameof(GetById),
@@ -27,18 +29,32 @@ namespace MovieTicketBooking.Controllers
                 screen);
         }
 
+        // GET: api/screens
         [HttpGet]
-        public async Task<ActionResult<List<ScreenResponse>>> GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var screens = await _screenService.GetAllAsync();
+            var screens =
+                await _screenService.GetAllAsync();
 
             return Ok(screens);
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ScreenResponse>> GetById(int id)
+        // GET: api/screens/theatre/{theatreId}
+        [HttpGet("theatre/{theatreId}")]
+        public async Task<IActionResult> GetByTheatre(int theatreId)
         {
-            var screen = await _screenService.GetByIdAsync(id);
+            var screens =
+                await _screenService.GetByTheatreIdAsync(theatreId);
+
+            return Ok(screens);
+        }
+
+        // GET: api/screens/{id}
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var screen =
+                await _screenService.GetByIdAsync(id);
 
             if (screen == null)
                 return NotFound();
@@ -46,26 +62,22 @@ namespace MovieTicketBooking.Controllers
             return Ok(screen);
         }
 
+        // PUT: api/screens/{id}
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(
             int id,
             UpdateScreenRequest request)
         {
-            var updated = await _screenService.UpdateAsync(id, request);
-
-            if (!updated)
-                return NotFound();
+            await _screenService.UpdateAsync(id, request);
 
             return NoContent();
         }
 
+        // DELETE: api/screens/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var deleted = await _screenService.DeleteAsync(id);
-
-            if (!deleted)
-                return NotFound();
+            await _screenService.DeleteAsync(id);
 
             return NoContent();
         }

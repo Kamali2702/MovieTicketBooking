@@ -17,9 +17,11 @@ namespace MovieTicketBooking.Controllers
 
         // POST: api/seats
         [HttpPost]
-        public async Task<IActionResult> Create(CreateSeatRequest request)
+        public async Task<IActionResult> Create(
+            CreateSeatRequest request)
         {
-            var seat = await _seatService.CreateAsync(request);
+            var seat =
+                await _seatService.CreateAsync(request);
 
             return CreatedAtAction(
                 nameof(GetById),
@@ -32,16 +34,21 @@ namespace MovieTicketBooking.Controllers
         public async Task<IActionResult> BulkCreate(
             BulkCreateSeatsRequest request)
         {
-            var seats = await _seatService.BulkCreateAsync(request);
+            var seats =
+                await _seatService.BulkCreateAsync(request);
 
-            return StatusCode(StatusCodes.Status201Created, seats);
+            return StatusCode(
+                StatusCodes.Status201Created,
+                seats);
         }
 
         // GET: api/seats/screen/{screenId}
         [HttpGet("screen/{screenId}")]
-        public async Task<IActionResult> GetByScreenId(int screenId)
+        public async Task<IActionResult> GetByScreenId(
+            int screenId)
         {
-            var seats = await _seatService.GetByScreenIdAsync(screenId);
+            var seats =
+                await _seatService.GetByScreenIdAsync(screenId);
 
             return Ok(seats);
         }
@@ -50,7 +57,8 @@ namespace MovieTicketBooking.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var seat = await _seatService.GetByIdAsync(id);
+            var seat =
+                await _seatService.GetByIdAsync(id);
 
             if (seat == null)
                 return NotFound();
