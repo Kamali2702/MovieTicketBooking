@@ -3,31 +3,38 @@
   display: block;
 }
 
+/* MAIN FIX: REMOVE THE LARGE LEFT AND RIGHT EMPTY SPACES */
+.hero-container,
+.section-container {
+  width: calc(100% - 48px);
+  max-width: 1600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Hero section */
 .hero-section {
   position: relative;
   overflow: hidden;
-  background: radial-gradient(circle at 78% 45%, rgba(113, 65, 157, 0.25), transparent 31%), radial-gradient(circle at 12% 80%, rgba(221, 73, 95, 0.12), transparent 34%), #0c1123;
-}
-
-.hero-container,
-.section-container {
-  width: min(1160px, calc(100% - 48px));
-  margin: auto;
+  background: radial-gradient( circle at 78% 45%, rgba(113, 65, 157, 0.25), transparent 31% ), radial-gradient( circle at 12% 80%, rgba(221, 73, 95, 0.12), transparent 34% ), #0c1123;
 }
 
 .hero-container {
-  min-height: 570px;
+  min-height: 620px;
   display: grid;
-  grid-template-columns: 1.05fr 0.95fr;
+  grid-template-columns: 1.1fr 0.9fr;
   align-items: center;
-  gap: 50px;
-  padding-top: 65px;
-  padding-bottom: 65px;
+  gap: 55px;
+  padding-top: 70px;
+  padding-bottom: 70px;
 }
 
+/* Left content */
 .hero-content {
   position: relative;
   z-index: 2;
+  width: 100%;
+  max-width: none;
 }
 
 .eyebrow,
@@ -36,58 +43,61 @@
   align-items: center;
   gap: 10px;
   color: #ff947d;
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 2px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1.3px;
 }
 
 .eyebrow-dot {
-  width: 8px;
-  height: 8px;
+  width: 9px;
+  height: 9px;
+  flex-shrink: 0;
   background: #ff806d;
   border-radius: 50%;
-  box-shadow: 0 0 12px #ff806d;
+  box-shadow: 0 0 13px #ff806d;
 }
 
 .hero-content h1 {
-  max-width: 650px;
+  max-width: 760px;
   margin: 27px 0 20px;
-  color: #fff;
-  font-size: clamp(42px, 5.2vw, 66px);
-  font-weight: 850;
-  line-height: 1.12;
+  color: #ffffff;
+  font-size: clamp(48px, 5vw, 72px);
+  font-weight: 800;
+  line-height: 1.15;
   letter-spacing: -2.5px;
 }
 
   .hero-content h1 span {
+    display: block;
     color: #ff806d;
   }
 
 .hero-description {
-  max-width: 510px;
-  color: #aab3c9;
-  font-size: 16px;
-  line-height: 1.8;
+  max-width: 620px;
+  color: #b7bfd3;
+  font-size: 17px;
+  line-height: 1.9;
 }
 
+/* Buttons */
 .hero-actions {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: 22px;
-  margin-top: 32px;
+  margin-top: 34px;
 }
 
 .primary-button {
   display: inline-flex;
   align-items: center;
   gap: 18px;
-  padding: 15px 21px;
+  padding: 16px 22px;
   background: linear-gradient(110deg, #ff806d, #e64b71);
   border-radius: 9px;
   color: white;
-  font-size: 13px;
-  font-weight: 750;
+  font-size: 15px;
+  font-weight: 700;
   text-decoration: none;
   box-shadow: 0 10px 30px rgba(230, 75, 113, 0.2);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -98,37 +108,75 @@
     box-shadow: 0 14px 35px rgba(230, 75, 113, 0.35);
   }
 
+.secondary-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #e2e6f1;
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+  .secondary-link:hover {
+    color: #ff947d;
+  }
+
 .hero-note {
   color: #aab3c9;
-  font-size: 12px;
+  font-size: 14px;
 }
 
-.hero-highlights {
+/* Benefits */
+.hero-benefits {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 48px;
+  padding-top: 25px;
+  border-top: 1px solid rgba(255, 255, 255, 0.13);
+}
+
+.benefit-item {
   display: flex;
-  flex-wrap: wrap;
-  gap: 26px;
-  margin-top: 52px;
+  align-items: flex-start;
+  gap: 10px;
 }
 
-.highlight-item {
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-}
-
-.highlight-number {
+.benefit-icon {
+  width: 25px;
+  height: 25px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 128, 109, 0.14);
+  border-radius: 50%;
   color: #ff947d;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 800;
 }
 
-.highlight-item span:last-child {
-  color: #e0e5ef;
-  font-size: 11px;
+.benefit-item div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
+.benefit-item strong {
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.benefit-item small {
+  color: #aab3c9;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+/* Right cinema illustration */
 .hero-visual {
-  min-height: 390px;
+  min-height: 420px;
   position: relative;
   display: grid;
   place-items: center;
@@ -137,8 +185,8 @@
 .cinema-card {
   position: relative;
   z-index: 2;
-  width: min(100%, 390px);
-  padding: 21px;
+  width: min(100%, 430px);
+  padding: 22px;
   background: linear-gradient(145deg, #282e49, #171d35);
   border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: 19px;
@@ -151,19 +199,19 @@
   align-items: center;
   justify-content: space-between;
   color: #bbc4da;
-  font-size: 9px;
-  font-weight: 800;
-  letter-spacing: 1.5px;
-  padding-bottom: 18px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding-bottom: 19px;
 }
 
 .cinema-screen {
-  min-height: 220px;
+  min-height: 235px;
   position: relative;
   overflow: hidden;
   display: grid;
   place-items: center;
-  background: linear-gradient(145deg, rgba(255, 130, 107, 0.75), rgba(94, 55, 130, 0.8)), #3e345c;
+  background: linear-gradient( 145deg, rgba(255, 130, 107, 0.75), rgba(94, 55, 130, 0.8) ), #3e345c;
   border-radius: 12px;
 }
 
@@ -171,15 +219,15 @@
   .cinema-screen::after {
     content: "";
     position: absolute;
-    width: 240px;
-    height: 240px;
+    width: 250px;
+    height: 250px;
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 50%;
   }
 
   .cinema-screen::after {
-    width: 170px;
-    height: 170px;
+    width: 180px;
+    height: 180px;
   }
 
 .screen-light {
@@ -196,23 +244,23 @@
   z-index: 1;
   display: grid;
   place-items: center;
-  width: 62px;
-  height: 62px;
+  width: 66px;
+  height: 66px;
   padding-left: 4px;
   color: white;
   background: rgba(255, 255, 255, 0.17);
   border: 1px solid rgba(255, 255, 255, 0.5);
   border-radius: 50%;
-  font-size: 20px;
+  font-size: 22px;
 }
 
 .screen-caption {
   position: absolute;
   bottom: 22px;
   color: white;
-  font-size: 9px;
-  font-weight: 800;
-  letter-spacing: 3px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
 }
 
 .card-bottom {
@@ -230,27 +278,28 @@
 
 .card-label {
   color: #ff987e;
-  font-size: 9px;
-  font-weight: 800;
-  letter-spacing: 1.5px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
 }
 
 .card-bottom strong {
   color: white;
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .ticket-mark {
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   display: grid;
   place-items: center;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 50%;
   color: #ff987e;
-  font-size: 20px;
+  font-size: 21px;
 }
 
+/* Floating ticket */
 .floating-ticket {
   position: absolute;
   right: -10px;
@@ -260,15 +309,15 @@
   align-items: center;
   gap: 12px;
   padding: 15px;
-  background: #fff;
+  background: #ffffff;
   border-radius: 12px;
   box-shadow: 0 18px 45px rgba(0, 0, 0, 0.25);
   transform: rotate(3deg);
 }
 
 .ticket-icon {
-  width: 35px;
-  height: 35px;
+  width: 37px;
+  height: 37px;
   display: grid;
   place-items: center;
   background: #fff0e9;
@@ -284,14 +333,15 @@
 
 .floating-ticket strong {
   color: #20263c;
-  font-size: 11px;
+  font-size: 13px;
 }
 
 .floating-ticket small {
   color: #7e879d;
-  font-size: 9px;
+  font-size: 11px;
 }
 
+/* Decorative circles */
 .visual-orbit {
   position: absolute;
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -312,7 +362,6 @@
 .visual-decoration {
   position: absolute;
   border-radius: 50%;
-  filter: blur(1px);
 }
 
 .decoration-one {
@@ -334,14 +383,13 @@
 }
 
 /* How it works section */
-
 .experience-section {
   padding: 90px 0 100px;
   background: #f6f7fb;
 }
 
 .section-heading {
-  max-width: 650px;
+  max-width: 760px;
   margin: 0 auto 45px;
   text-align: center;
 }
@@ -353,10 +401,10 @@
 .section-heading h2 {
   margin: 15px 0;
   color: #171d32;
-  font-size: clamp(30px, 4vw, 43px);
-  font-weight: 850;
+  font-size: clamp(32px, 4vw, 46px);
+  font-weight: 800;
   letter-spacing: -1.5px;
-  line-height: 1.2;
+  line-height: 1.25;
 }
 
   .section-heading h2 span {
@@ -365,21 +413,22 @@
 
 .section-heading p {
   color: #7b8498;
-  font-size: 14px;
-  line-height: 1.7;
+  font-size: 16px;
+  line-height: 1.8;
 }
 
+/* Booking cards */
 .steps-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 17px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
 }
 
 .step-card {
   position: relative;
   min-height: 225px;
   padding: 25px;
-  background: white;
+  background: #ffffff;
   border: 1px solid #e8eaf1;
   border-radius: 15px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -395,45 +444,45 @@
   top: 23px;
   right: 23px;
   color: #c0c5d2;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 800;
 }
 
 .step-symbol {
-  width: 44px;
-  height: 44px;
+  width: 46px;
+  height: 46px;
   display: grid;
   place-items: center;
   background: #fff0eb;
   border-radius: 12px;
   color: #e46b5d;
-  font-size: 23px;
+  font-size: 24px;
   font-weight: 800;
 }
 
 .step-card h3 {
   margin: 22px 0 9px;
   color: #1e263e;
-  font-size: 16px;
+  font-size: 18px;
+  font-weight: 700;
 }
 
 .step-card p {
   margin: 0;
-  color: #81899c;
-  font-size: 12px;
+  color: #737d92;
+  font-size: 14px;
   line-height: 1.8;
 }
 
-/* Responsive design */
-
-@media (max-width: 900px) {
+/* Tablet */
+@media (max-width: 1000px) {
   .hero-container {
     grid-template-columns: 1fr;
-    gap: 25px;
+    gap: 35px;
   }
 
   .hero-content {
-    max-width: 650px;
+    max-width: none;
   }
 
   .hero-visual {
@@ -441,24 +490,29 @@
   }
 
   .steps-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-@media (max-width: 550px) {
+/* Mobile */
+@media (max-width: 600px) {
   .hero-container,
   .section-container {
     width: calc(100% - 32px);
   }
 
   .hero-container {
-    padding-top: 65px;
-    padding-bottom: 50px;
+    padding-top: 55px;
+    padding-bottom: 45px;
   }
 
   .hero-content h1 {
     font-size: 43px;
-    letter-spacing: -1.8px;
+    letter-spacing: -1.5px;
+  }
+
+  .hero-description {
+    font-size: 16px;
   }
 
   .hero-highlights {
@@ -487,6 +541,10 @@
     padding: 65px 0;
   }
 
+  .section-heading h2 {
+    font-size: 33px;
+  }
+
   .steps-grid {
     grid-template-columns: 1fr;
   }
@@ -494,4 +552,29 @@
   .step-card {
     min-height: 190px;
   }
+}
+
+
+.hero-container,
+.section-container {
+  width: min(1200px, calc(100% - 64px));
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hero-container {
+  min-height: 620px;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  align-items: center;
+  gap: 55px;
+  padding-top: 70px;
+  padding-bottom: 70px;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: none;
 }
