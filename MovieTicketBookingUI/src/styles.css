@@ -1,1 +1,139 @@
-/* You can add global styles to this file, and also import other style files */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+
+:root {
+  font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+  font-size: 16px;
+  color: #ffffff;
+  background: #0c1123;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+html {
+  min-width: 320px;
+  min-height: 100%;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+a {
+  color: inherit;
+}
+
+::selection {
+  color: white;
+  background: #e66c60;
+}
+
+/* Improve readability across the Home page */
+
+app-root .eyebrow,
+app-root .section-label {
+  font-size: 13px !important;
+  letter-spacing: 1.2px !important;
+}
+
+app-root .hero-description {
+  font-size: 17px !important;
+}
+
+app-root .hero-note {
+  font-size: 14px !important;
+}
+
+app-root .highlight-number {
+  font-size: 14px !important;
+}
+
+app-root .highlight-item span:last-child {
+  font-size: 13px !important;
+}
+
+app-root .card-top {
+  font-size: 11px !important;
+  letter-spacing: 1px !important;
+}
+
+app-root .screen-caption {
+  font-size: 11px !important;
+  letter-spacing: 1.5px !important;
+}
+
+app-root .card-label {
+  font-size: 11px !important;
+  letter-spacing: 1px !important;
+}
+
+app-root .card-bottom strong {
+  font-size: 15px !important;
+}
+
+app-root .floating-ticket strong {
+  font-size: 13px !important;
+}
+
+app-root .floating-ticket small {
+  font-size: 11px !important;
+}
+
+app-root .section-heading p {
+  font-size: 16px !important;
+}
+
+app-root .step-card h3 {
+  font-size: 18px !important;
+}
+
+app-root .step-card p {
+  font-size: 14px !important;
+}
+
+/* Header and footer typography */
+
+app-root .main-nav a {
+  font-size: 15px !important;
+}
+
+app-root .header-button {
+  font-size: 14px !important;
+}
+
+app-root .brand-name {
+  font-size: 16px !important;
+}
+
+  app-root .brand-name small {
+    font-size: 10px !important;
+  }
+
+app-root .footer-inner strong {
+  font-size: 13px !important;
+}
+
+app-root .footer-inner p {
+  font-size: 14px !important;
+}
+
+app-root .footer-inner .copyright {
+  font-size: 13px !important;
+}

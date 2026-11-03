@@ -1,0 +1,497 @@
+
+:host {
+  display: block;
+}
+
+.hero-section {
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(circle at 78% 45%, rgba(113, 65, 157, 0.25), transparent 31%), radial-gradient(circle at 12% 80%, rgba(221, 73, 95, 0.12), transparent 34%), #0c1123;
+}
+
+.hero-container,
+.section-container {
+  width: min(1160px, calc(100% - 48px));
+  margin: auto;
+}
+
+.hero-container {
+  min-height: 570px;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  align-items: center;
+  gap: 50px;
+  padding-top: 65px;
+  padding-bottom: 65px;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+}
+
+.eyebrow,
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #ff947d;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.eyebrow-dot {
+  width: 8px;
+  height: 8px;
+  background: #ff806d;
+  border-radius: 50%;
+  box-shadow: 0 0 12px #ff806d;
+}
+
+.hero-content h1 {
+  max-width: 650px;
+  margin: 27px 0 20px;
+  color: #fff;
+  font-size: clamp(42px, 5.2vw, 66px);
+  font-weight: 850;
+  line-height: 1.12;
+  letter-spacing: -2.5px;
+}
+
+  .hero-content h1 span {
+    color: #ff806d;
+  }
+
+.hero-description {
+  max-width: 510px;
+  color: #aab3c9;
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 22px;
+  margin-top: 32px;
+}
+
+.primary-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+  padding: 15px 21px;
+  background: linear-gradient(110deg, #ff806d, #e64b71);
+  border-radius: 9px;
+  color: white;
+  font-size: 13px;
+  font-weight: 750;
+  text-decoration: none;
+  box-shadow: 0 10px 30px rgba(230, 75, 113, 0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+  .primary-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 35px rgba(230, 75, 113, 0.35);
+  }
+
+.hero-note {
+  color: #aab3c9;
+  font-size: 12px;
+}
+
+.hero-highlights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 26px;
+  margin-top: 52px;
+}
+
+.highlight-item {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.highlight-number {
+  color: #ff947d;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.highlight-item span:last-child {
+  color: #e0e5ef;
+  font-size: 11px;
+}
+
+.hero-visual {
+  min-height: 390px;
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.cinema-card {
+  position: relative;
+  z-index: 2;
+  width: min(100%, 390px);
+  padding: 21px;
+  background: linear-gradient(145deg, #282e49, #171d35);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 19px;
+  transform: rotate(-4deg);
+  box-shadow: 0 35px 85px rgba(0, 0, 0, 0.4);
+}
+
+.card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #bbc4da;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  padding-bottom: 18px;
+}
+
+.cinema-screen {
+  min-height: 220px;
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(145deg, rgba(255, 130, 107, 0.75), rgba(94, 55, 130, 0.8)), #3e345c;
+  border-radius: 12px;
+}
+
+  .cinema-screen::before,
+  .cinema-screen::after {
+    content: "";
+    position: absolute;
+    width: 240px;
+    height: 240px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+  }
+
+  .cinema-screen::after {
+    width: 170px;
+    height: 170px;
+  }
+
+.screen-light {
+  position: absolute;
+  width: 190px;
+  height: 190px;
+  background: rgba(255, 220, 199, 0.18);
+  border-radius: 50%;
+  filter: blur(20px);
+}
+
+.play-symbol {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 62px;
+  height: 62px;
+  padding-left: 4px;
+  color: white;
+  background: rgba(255, 255, 255, 0.17);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  font-size: 20px;
+}
+
+.screen-caption {
+  position: absolute;
+  bottom: 22px;
+  color: white;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 3px;
+}
+
+.card-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 20px;
+}
+
+  .card-bottom > div:first-child {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+.card-label {
+  color: #ff987e;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+
+.card-bottom strong {
+  color: white;
+  font-size: 14px;
+}
+
+.ticket-mark {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  color: #ff987e;
+  font-size: 20px;
+}
+
+.floating-ticket {
+  position: absolute;
+  right: -10px;
+  bottom: 35px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 15px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.25);
+  transform: rotate(3deg);
+}
+
+.ticket-icon {
+  width: 35px;
+  height: 35px;
+  display: grid;
+  place-items: center;
+  background: #fff0e9;
+  border-radius: 9px;
+  color: #ed6b5c;
+}
+
+.floating-ticket div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.floating-ticket strong {
+  color: #20263c;
+  font-size: 11px;
+}
+
+.floating-ticket small {
+  color: #7e879d;
+  font-size: 9px;
+}
+
+.visual-orbit {
+  position: absolute;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 50%;
+  transform: rotate(-28deg);
+}
+
+.orbit-one {
+  width: 440px;
+  height: 300px;
+}
+
+.orbit-two {
+  width: 500px;
+  height: 350px;
+}
+
+.visual-decoration {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(1px);
+}
+
+.decoration-one {
+  top: 32px;
+  right: 35px;
+  width: 20px;
+  height: 20px;
+  background: #ff806d;
+  box-shadow: 0 0 35px #ff806d;
+}
+
+.decoration-two {
+  bottom: 40px;
+  left: 12px;
+  width: 11px;
+  height: 11px;
+  background: #a78bfa;
+  box-shadow: 0 0 30px #a78bfa;
+}
+
+/* How it works section */
+
+.experience-section {
+  padding: 90px 0 100px;
+  background: #f6f7fb;
+}
+
+.section-heading {
+  max-width: 650px;
+  margin: 0 auto 45px;
+  text-align: center;
+}
+
+.section-label {
+  color: #d65c58;
+}
+
+.section-heading h2 {
+  margin: 15px 0;
+  color: #171d32;
+  font-size: clamp(30px, 4vw, 43px);
+  font-weight: 850;
+  letter-spacing: -1.5px;
+  line-height: 1.2;
+}
+
+  .section-heading h2 span {
+    color: #e66c60;
+  }
+
+.section-heading p {
+  color: #7b8498;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 17px;
+}
+
+.step-card {
+  position: relative;
+  min-height: 225px;
+  padding: 25px;
+  background: white;
+  border: 1px solid #e8eaf1;
+  border-radius: 15px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+  .step-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 16px 35px rgba(25, 35, 65, 0.08);
+  }
+
+.step-number {
+  position: absolute;
+  top: 23px;
+  right: 23px;
+  color: #c0c5d2;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.step-symbol {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  background: #fff0eb;
+  border-radius: 12px;
+  color: #e46b5d;
+  font-size: 23px;
+  font-weight: 800;
+}
+
+.step-card h3 {
+  margin: 22px 0 9px;
+  color: #1e263e;
+  font-size: 16px;
+}
+
+.step-card p {
+  margin: 0;
+  color: #81899c;
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+/* Responsive design */
+
+@media (max-width: 900px) {
+  .hero-container {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+
+  .hero-content {
+    max-width: 650px;
+  }
+
+  .hero-visual {
+    min-height: 360px;
+  }
+
+  .steps-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 550px) {
+  .hero-container,
+  .section-container {
+    width: calc(100% - 32px);
+  }
+
+  .hero-container {
+    padding-top: 65px;
+    padding-bottom: 50px;
+  }
+
+  .hero-content h1 {
+    font-size: 43px;
+    letter-spacing: -1.8px;
+  }
+
+  .hero-highlights {
+    gap: 17px;
+    margin-top: 35px;
+  }
+
+  .hero-visual {
+    min-height: 320px;
+  }
+
+  .cinema-card {
+    padding: 15px;
+  }
+
+  .cinema-screen {
+    min-height: 180px;
+  }
+
+  .floating-ticket {
+    right: -3px;
+    bottom: 12px;
+  }
+
+  .experience-section {
+    padding: 65px 0;
+  }
+
+  .steps-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .step-card {
+    min-height: 190px;
+  }
+}
