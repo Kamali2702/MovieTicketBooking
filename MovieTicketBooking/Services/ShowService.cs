@@ -41,8 +41,7 @@ namespace MovieTicketBooking.Services
 
             if (movie == null)
             {
-                throw new KeyNotFoundException(
-                    "Movie not found.");
+                throw new KeyNotFoundException("Movie not found.");
             }
 
             var screen = await _screenRepository.GetByIdAsync(
@@ -50,8 +49,7 @@ namespace MovieTicketBooking.Services
 
             if (screen == null)
             {
-                throw new KeyNotFoundException(
-                    "Screen not found.");
+                throw new KeyNotFoundException("Screen not found.");
             }
 
             var hasOverlap = await _showRepository.HasOverlapAsync(
@@ -149,8 +147,7 @@ namespace MovieTicketBooking.Services
         public async Task<List<ShowResponse>> GetByMovieIdAsync(
             int movieId)
         {
-            var shows = await _showRepository.GetByMovieIdAsync(
-                movieId);
+            var shows = await _showRepository.GetByMovieIdAsync(movieId);
 
             return shows
                 .Select(MapToResponse)
@@ -185,16 +182,14 @@ namespace MovieTicketBooking.Services
 
             if (show == null)
             {
-                throw new KeyNotFoundException(
-                    "Show not found.");
+                throw new KeyNotFoundException("Show not found.");
             }
 
             var seats = await _showRepository.GetSeatsByScreenIdAsync(
                 show.ScreenId);
 
             var showSeats =
-                await _showRepository.GetShowSeatsByShowIdAsync(
-                    showId);
+                await _showRepository.GetShowSeatsByShowIdAsync(showId);
 
             var showSeatStatus = showSeats.ToDictionary(
                 ss => ss.SeatId,
@@ -207,7 +202,10 @@ namespace MovieTicketBooking.Services
                 SeatNumber = seat.SeatNumber,
                 SeatLabel = $"{seat.RowName}{seat.SeatNumber}",
                 SeatType = seat.SeatType,
-                Price = show.TicketPrice,
+
+                // Use the individual seat price.
+                Price = seat.Price ?? show.TicketPrice,
+
                 Status = showSeatStatus.TryGetValue(
                     seat.SeatId,
                     out var status)
@@ -236,8 +234,7 @@ namespace MovieTicketBooking.Services
 
             if (show == null)
             {
-                throw new KeyNotFoundException(
-                    "Show not found.");
+                throw new KeyNotFoundException("Show not found.");
             }
 
             var movie = await _movieRepository.GetByIdAsync(
@@ -245,8 +242,7 @@ namespace MovieTicketBooking.Services
 
             if (movie == null)
             {
-                throw new KeyNotFoundException(
-                    "Movie not found.");
+                throw new KeyNotFoundException("Movie not found.");
             }
 
             var screen = await _screenRepository.GetByIdAsync(
@@ -254,8 +250,7 @@ namespace MovieTicketBooking.Services
 
             if (screen == null)
             {
-                throw new KeyNotFoundException(
-                    "Screen not found.");
+                throw new KeyNotFoundException("Screen not found.");
             }
 
             var hasOverlap = await _showRepository.HasOverlapAsync(
@@ -285,8 +280,7 @@ namespace MovieTicketBooking.Services
 
             if (show == null)
             {
-                throw new KeyNotFoundException(
-                    "Show not found.");
+                throw new KeyNotFoundException("Show not found.");
             }
 
             var showSeats =
@@ -294,8 +288,7 @@ namespace MovieTicketBooking.Services
 
             if (showSeats.Count > 0)
             {
-                await _showRepository.DeleteShowSeatsAsync(
-                    showSeats);
+                await _showRepository.DeleteShowSeatsAsync(showSeats);
             }
 
             await _showRepository.DeleteAsync(show);

@@ -1,4 +1,5 @@
-﻿using MovieTicketBooking.DTOs.Bookings;
+﻿
+using MovieTicketBooking.DTOs.Bookings;
 using MovieTicketBooking.Models;
 using MovieTicketBooking.Repositories.Interfaces;
 using MovieTicketBooking.Services.Interfaces;
@@ -75,8 +76,16 @@ namespace MovieTicketBooking.Services
                 throw new KeyNotFoundException(
                     "One or more seats were not found.");
 
-            decimal totalAmount =
-                show.TicketPrice * request.SeatIds.Count;
+            // Get the individual price of each selected seat.
+            var seatPrices = selectedShowSeats.ToDictionary(
+                ss => ss.SeatId,
+                ss => ss.Seat.Price ?? show.TicketPrice
+            );
+
+            // Calculate total using individual seat prices.
+            decimal totalAmount = request.SeatIds.Sum(
+                seatId => seatPrices[seatId]
+            );
 
             var booking = new Booking
             {
@@ -95,7 +104,7 @@ namespace MovieTicketBooking.Services
                 booking.BookingSeats.Add(new BookingSeat
                 {
                     SeatId = seatId,
-                    Price = show.TicketPrice
+                    Price = seatPrices[seatId]
                 });
             }
 

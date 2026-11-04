@@ -1,4 +1,6 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿
+using Microsoft.IdentityModel.Tokens;
+using MovieTicketBooking.Authorization;
 using MovieTicketBooking.DTOs.Auth;
 using MovieTicketBooking.Exceptions;
 using MovieTicketBooking.Models;
@@ -26,45 +28,37 @@ namespace MovieTicketBooking.Services
             _passwordHasher = passwordHasher;
         }
 
-        public async Task<AuthResponse> RegisterAsync(RegisterRequest request)
+        // Customer registration
+        public async Task<AuthResponse> RegisterAsync(
+            RegisterRequest request)
         {
             if (string.IsNullOrWhiteSpace(request.Username))
-            {
                 throw new ArgumentException("Username is required.");
-            }
 
             if (string.IsNullOrWhiteSpace(request.Email))
-            {
                 throw new ArgumentException("Email is required.");
-            }
 
             if (string.IsNullOrWhiteSpace(request.Password))
-            {
                 throw new ArgumentException("Password is required.");
-            }
 
             var existingUsername =
                 await _authRepository.GetByUsernameAsync(request.Username);
 
             if (existingUsername != null)
-            {
                 throw new ConflictException("Username already exists.");
-            }
 
             var existingEmail =
                 await _authRepository.GetByEmailAsync(request.Email);
 
             if (existingEmail != null)
-            {
                 throw new ConflictException("Email already exists.");
-            }
 
             var user = new User
             {
-                Username = request.Username,
-                Email = request.Email,
+                Username = request.Username.Trim(),
+                Email = request.Email.Trim(),
                 PasswordHash = _passwordHasher.HashPassword(request.Password),
-                Role = "User"
+                Role = Roles.Customer
             };
 
             await _authRepository.CreateAsync(user);
@@ -79,17 +73,14 @@ namespace MovieTicketBooking.Services
             };
         }
 
+        // User login
         public async Task<AuthResponse> LoginAsync(LoginRequest request)
         {
             if (string.IsNullOrWhiteSpace(request.Username))
-            {
                 throw new ArgumentException("Username is required.");
-            }
 
             if (string.IsNullOrWhiteSpace(request.Password))
-            {
                 throw new ArgumentException("Password is required.");
-            }
 
             var user =
                 await _authRepository.GetByUsernameAsync(request.Username);
@@ -99,7 +90,8 @@ namespace MovieTicketBooking.Services
                     request.Password,
                     user.PasswordHash))
             {
-                throw new ArgumentException("Invalid username or password.");
+                throw new ArgumentException(
+                    "Invalid username or password.");
             }
 
             return new AuthResponse
@@ -112,6 +104,7 @@ namespace MovieTicketBooking.Services
             };
         }
 
+        // Generate JWT with user identity and role
         private string GenerateToken(User user)
         {
             var key = _configuration["Jwt:Key"];
@@ -120,6 +113,15 @@ namespace MovieTicketBooking.Services
             {
                 throw new InvalidOperationException(
                     "JWT key is not configured.");
+            }
+
+            var expiryMinutes =
+                _configuration.GetValue<int>("Jwt:ExpiryMinutes");
+
+            if (expiryMinutes <= 0)
+            {
+                throw new InvalidOperationException(
+                    "JWT expiry minutes must be greater than zero.");
             }
 
             var claims = new[]
@@ -141,17 +143,12 @@ namespace MovieTicketBooking.Services
                     user.Email)
             };
 
-            var securityKey =
-                new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(key));
+            var securityKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(key));
 
-            var credentials =
-                new SigningCredentials(
-                    securityKey,
-                    SecurityAlgorithms.HmacSha256);
-
-            var expiryMinutes =
-                _configuration.GetValue<int>("Jwt:ExpiryMinutes");
+            var credentials = new SigningCredentials(
+                securityKey,
+                SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
                 issuer: _configuration["Jwt:Issuer"],

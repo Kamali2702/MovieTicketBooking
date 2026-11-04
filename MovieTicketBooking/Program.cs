@@ -8,11 +8,14 @@ using MovieTicketBooking.Repositories;
 using MovieTicketBooking.Repositories.Interfaces;
 using MovieTicketBooking.Services;
 using MovieTicketBooking.Services.Interfaces;
+using System.Security.Claims;
 using System.Text;
+
+using MovieTicketBooking.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Add controllers
 builder.Services.AddControllers();
 
 // CORS configuration for Angular
@@ -48,12 +51,23 @@ builder.Services.AddAuthentication(
 
             IssuerSigningKey = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(
-                    builder.Configuration["Jwt:Key"]!))
+                    builder.Configuration["Jwt:Key"]!)),
+
+            RoleClaimType = ClaimTypes.Role
         };
     });
 
-// Authorization
-builder.Services.AddAuthorization();
+// Role-based Authorization
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly", policy =>
+        policy.RequireAuthenticatedUser()
+              .RequireRole(Roles.Admin));
+
+    options.AddPolicy("CustomerOnly", policy =>
+        policy.RequireAuthenticatedUser()
+              .RequireRole(Roles.Customer));
+});
 
 // Register repositories
 builder.Services.AddScoped<IMovieRepository, MovieRepository>();
@@ -80,12 +94,12 @@ builder.Services.AddProblemDetails();
 
 var app = builder.Build();
 
-// Global exception handler
+// Exception handling
 app.UseExceptionHandler();
 
 app.UseHttpsRedirection();
 
-// CORS must run before authentication and authorization
+// CORS
 app.UseCors("Angular");
 
 // Authentication and Authorization

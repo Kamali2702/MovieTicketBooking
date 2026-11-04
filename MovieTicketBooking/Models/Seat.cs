@@ -12,6 +12,8 @@
 
         public string SeatType { get; set; } = string.Empty;
 
+        public decimal? Price { get; set; }
+
         public Screen Screen { get; set; } = null!;
     }
 }
