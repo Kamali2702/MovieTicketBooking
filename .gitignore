@@ -3,3 +3,6 @@ bin/
 obj/
 *.user
 *.suo
+# Local application settings
+MovieTicketBooking/appsettings.json
+MovieTicketBooking/appsettings.Development.json

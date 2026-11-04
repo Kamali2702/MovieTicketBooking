@@ -1,12 +1,15 @@
-
 import { Routes } from '@angular/router';
 import { Home } from './pages/home/home';
+import { Movies } from './pages/movies/movies';
 
 export const routes: Routes = [
   {
     path: '',
-    component: Home,
-    title: 'Home | Movie Ticket Booking'
+    component: Home
+  },
+  {
+    path: 'movies',
+    component: Movies
   },
   {
     path: '**',

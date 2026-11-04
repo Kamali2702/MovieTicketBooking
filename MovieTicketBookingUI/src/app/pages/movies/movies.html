@@ -1,0 +1,140 @@
+
+<section class="movies-page">
+
+  <div class="movies-heading">
+    <div>
+      <span class="section-label">YOUR CINEMA GUIDE</span>
+      <h1>Explore Movies</h1>
+      <p>Find a movie worth watching.</p>
+    </div>
+  </div>
+
+  <div class="search-section">
+    <div class="search-box">
+      <span>⌕</span>
+      <input #searchBox
+             type="text"
+             placeholder="Search by movie title..."
+             [value]="searchTerm"
+             (keyup.enter)="searchMovies(searchBox.value)" />
+    </div>
+
+    <button class="search-button"
+            (click)="searchMovies(searchBox.value)"
+            [disabled]="isLoading">
+      Search
+    </button>
+
+    <button class="clear-button"
+            (click)="searchBox.value = ''; clearSearch()"
+            [disabled]="isLoading">
+      Clear
+    </button>
+  </div>
+
+  <div class="catalogue-heading">
+    <div>
+      <h2>All Movies</h2>
+      <p>Discover our movie collection</p>
+    </div>
+
+    @if (!isLoading && !errorMessage) {
+    <span class="movie-count">{{ movies.length }} movies</span>
+    }
+  </div>
+
+  @if (isLoading) {
+  <div class="status-message">
+    Loading movies...
+  </div>
+  }
+  @else if (errorMessage) {
+  <div class="status-message error">
+    <p>{{ errorMessage }}</p>
+    <button class="search-button" (click)="loadMovies()">
+      Try Again
+    </button>
+  </div>
+  }
+  @else if (movies.length === 0) {
+  <div class="status-message">
+    <h3>No movies found</h3>
+    <p>Try another movie title.</p>
+  </div>
+  }
+  @else {
+
+  <div class="movies-grid">
+
+    @for (movie of movies; track movie.movieId) {
+
+    <article class="movie-card">
+
+      <div class="poster-container">
+
+        @if (getPosterUrl(movie.title); as posterUrl) {
+        <img class="movie-poster"
+             [src]="posterUrl"
+             [alt]="movie.title + ' movie poster'"
+             loading="lazy" />
+        }
+        @else {
+        <div class="poster-fallback">
+          <span>🎬</span>
+          <h3>{{ movie.title || 'Movie' }}</h3>
+        </div>
+        }
+
+        <span class="genre-badge">
+          {{ movie.genre || 'Movie' }}
+        </span>
+
+      </div>
+
+      <div class="movie-info">
+
+        <h3>{{ movie.title || 'Untitled Movie' }}</h3>
+
+        <p class="movie-description">
+          {{ movie.description || 'Discover this movie at your cinema.' }}
+        </p>
+
+        <div class="movie-meta">
+          <span>{{ movie.language }}</span>
+          <span>{{ movie.durationMinutes }} min</span>
+        </div>
+
+        <div class="movie-footer">
+          <span>
+            {{ movie.releaseDate | date:'dd MMM yyyy' }}
+          </span>
+          <span class="movie-arrow">↗</span>
+        </div>
+
+      </div>
+
+    </article>
+
+    }
+
+  </div>
+
+  <div class="pagination">
+
+    <button (click)="previousPage()"
+            [disabled]="currentPage === 1 || isLoading">
+      ← Previous
+    </button>
+
+    <span>Page {{ currentPage }}</span>
+
+    <button (click)="nextPage()"
+            [disabled]="!hasNextPage || isLoading">
+      Next →
+    </button>
+
+  </div>
+
+  }
+
+</section>
